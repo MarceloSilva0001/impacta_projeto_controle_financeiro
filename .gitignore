@@ -1,0 +1,33 @@
+# Dependências do Node
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operacional específico
+.DS_Store
+Thumbs.db
+
+# Diretórios de build
+dist
+build
+
+# Arquivos de ambiente
+.env
+
+# Arquivos temporários de editores
+*.swp
+*.swo
+
+# Pasta coverage de testes
+coverage
+
+# Pasta .next para projetos Next.js
+.next
+
+# Pasta .nuxt para projetos Nuxt.js
+.nuxt
