@@ -1,5 +1,5 @@
 const express = require('express');
-const UserController = require('../controllers/UserController');
+const UserController = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -9,7 +9,5 @@ router.get('/users', UserController.getUsers); // Buscar todos os usuários
 router.get('/users/:id', UserController.getUserById); // Buscar usuário por ID
 router.put('/users/:id', UserController.updateUser); // Atualizar usuário
 router.delete('/users/:id', UserController.deleteUser); // Deletar usuário
-
-// Rotas do site
 
 module.exports = router;
