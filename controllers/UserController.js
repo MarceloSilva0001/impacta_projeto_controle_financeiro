@@ -1,17 +1,26 @@
 const User = require('../models/User');
+const path = require('path');
+const { ValidationError, UniqueConstraintError } = require('sequelize');
 
 const UserController = {
   // Criar um novo usuário
   async createUser(req, res) {
+    console.log(req.body);
     try {
-      const { name, email, cpf, dateOfBirth, password } = req.body;
-      const user = await User.create({ name, email, cpf, dateOfBirth, password });
-      res.status(201).json(user);
+      const user = await User.create(req.body);
+      res.status(201).sendFile(path.join(__dirname, '../views/auth/login.html'));
     } catch (error) {
-      res.status(500).json({ error: 'Erro ao criar usuário', details: error.message });
+      let errorMessage = 'Erro ao criar usuário';
+      if (error instanceof UniqueConstraintError) {
+        errorMessage = 'Erro de unicidade: ' + error.errors.map(e => e.message).join(', ');
+      } else if (error instanceof ValidationError) {
+        errorMessage = 'Erro de validação: ' + error.errors.map(e => e.message).join(', ');
+      }
+      console.log(error);
+      res.redirect(`/register?error=${encodeURIComponent(errorMessage)}`);
     }
   },
-
+  
   // Buscar todos os usuários
   async getUsers(req, res) {
     try {
