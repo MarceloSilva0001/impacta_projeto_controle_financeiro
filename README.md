@@ -17,9 +17,9 @@ npm install
 ## Configuração do Banco de Dados
 
 Este projeto utiliza o banco de dados **MySQL**. Siga os passos abaixo para configurá-lo corretamente:
-Vídeo mostrando o processo de instalação.
 
 [Assista ao vídeo no YouTube](https://www.youtube.com/watch?v=feF_Hm5LLjU)
+Vídeo mostrando o processo de instalação.
 
 1. Baixe e instale o MySQL pelo site oficial.
 2. Durante a instalação, crie uma instância de desenvolvimento e defina as credenciais de acesso.
