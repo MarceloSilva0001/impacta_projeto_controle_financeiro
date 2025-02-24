@@ -10,9 +10,10 @@
 
     <div class="container">
         <h2 class="title-login">Login</h2>
-        <form id="formLogin">
-            <input type="email" id="emailLogin" placeholder="E-mail" required>
-            <input type="password" id="senhaLogin" placeholder="Senha" required>
+        <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+        <form id="formLogin" method="post" action="/authLogin">
+            <input type="email" id="emailLogin" placeholder="E-mail" name="email" required>
+            <input type="password" id="senhaLogin" placeholder="Senha" name="password" required>
             <button type="submit">Entrar</button>
         </form>
         <div class="switch-form">
@@ -20,6 +21,21 @@
         </div>
     </div>
 
-    <script src="js/register/login.js"></script>
+    <script>
+        // Função para mostrar a mensagem de erro
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = message;
+            errorMessage.style.color = "red"
+        }
+
+        // Checar se há uma mensagem de erro na URL
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        if (error) {
+            showError(error);
+        }
+    </script>
 </body>
 </html>
