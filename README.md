@@ -5,7 +5,7 @@
 ### Passo 1: Clonar o Repositório
 Clone o repositório do projeto usando o comando:
 ```sh
- git clone <URL_DO_REPOSITORIO>
+ git clone https://github.com/MarceloSilva0001/impacta_projeto_controle_financeiro.git
 ```
 
 ### Passo 2: Instalar Dependências
