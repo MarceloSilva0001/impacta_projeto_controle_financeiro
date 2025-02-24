@@ -44,7 +44,7 @@ npm start
 ```
 3. Acesse o sistema pelo navegador em:
 ```sh
-http://localhost:8080
+http://localhost:8080/login
 ```
 
 Agora é só testar!
