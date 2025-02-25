@@ -1,6 +1,7 @@
 # Impacta - Projeto Controle Financeiro
 
 ## Início
+O projeto uso Node, caso você não tenha intalado, faça a instalação em seu computador.
 
 ### Passo 1: Clonar o Repositório
 Clone o repositório do projeto usando o comando:
@@ -37,6 +38,12 @@ Vídeo mostrando o processo de instalação.
 ```
 
 4. Teste a conexão abrindo o MySQL Command Line e tente se conectar com a senha que definiu. Se a conexão for bem-sucedida, o banco de dados está configurado corretamente.
+
+## Executando as migrações do banco
+No terminal do projeto, execute o comando abaixo
+```sh
+npx sequelize-cli db:migrate
+```
 
 ## Executando o Projeto
 
