@@ -32,7 +32,7 @@ Vídeo mostrando o processo de instalação.
   "database": "financas_impacta",
   "host": "127.0.0.1",
   "dialect": "mysql",
-  "port": 3307
+  "port": 3306
 }
 ```
 
