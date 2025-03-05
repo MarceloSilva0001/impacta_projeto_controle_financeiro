@@ -1,30 +1,205 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
     <link rel="stylesheet" href="css/register/register.css">
 </head>
+
 <body>
 
     <div class="container">
         <h2 class="title-cadastro">Cadastro</h2>
         <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
-        <form id="formCadastro" method="post" action="/users">
-            <input type="text" id="nome" placeholder="Nome" name="name"  required>
-            <input type="date" id="dataNascimento" name="dateOfBirth"  required>
-            <input type="text" id="cpf" placeholder="CPF" name="cpf"  required>
-            <input type="email" id="emailCadastro" name="email"  placeholder="E-mail" required>
-            <input type="password" id="senhaCadastro" name="password"  placeholder="Senha" required>
-            <button type="submit">Cadastrar</button>
-        </form>
+        <div>
+            <form id="formCadastro" method="post" action="/users">
+                <input type="text" id="nome" placeholder="Nome Completo" name="name" required>
+
+                <input type="date" id="dataNascimento" name="dateOfBirth" required>
+                <span id="spanDate" class="formatacao-mensagens vanish">Insira uma data válida!</span>
+
+                <input type="text" id="cpf" placeholder="CPF" name="cpf" required>
+                <span id="spanCpf" class="formatacao-mensagens vanish">O CPF está inválido, por favor insira um CPF
+                    válido!</span>
+
+                <input type="text" id="emailCadastro" name="email" placeholder="E-mail" required>
+                <span id="spanEmail" class="formatacao-mensagens vanish">E-mail inválido. Por favor, insira um e-mail
+                    com "@" e "."</span>
+
+                <input type="password" id="senhaCadastro" name="password" placeholder="Senha" required>
+                <p id="caracteres" class="formatacao-instrucoes"> Tenha no mínimo 8 caracteres.</p>
+                <p id="especial" class="formatacao-instrucoes"> Tenha ao menos, 1 caractere especial.</p>
+                <p id="maiuscula" class="formatacao-instrucoes"> Coloque uma letra maiúscula.</p>
+                
+                <input type="password" id="check-pass" name="check-pass" placeholder="Confirmar senha" required>
+
+                <p class="formatacao-mensagens vanish">Senha inválida, verifique novamente.</p>
+                <p id="spanConfirmar" class="formatacao-mensagens vanish">Senhas não compatíveis, verifique novamente!
+                </p>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
         <div class="switch-form">
             Já tem uma conta? <a href="/login">Faça login</a>
         </div>
     </div>
 
     <script>
+        const form = document.getElementById("formCadastro")
+        const infoCaracteres = document.getElementById("formCadastro")
+        const infoMaiusculo = document.getElementById("formCadastro")
+        const infoEspeciais = document.getElementById("formCadastro")
+        const inputDataNascimento = document.getElementById("dataNascimento")
+        const inputCPF = document.getElementById("cpf")
+        const inputEmail = document.getElementById("emailCadastro")
+        const inputSenha = document.getElementById("check-pass")
+        const inputSenha1 = document.getElementById("senhaCadastro")
+
+        const spanDate = document.getElementById("spanDate")
+        const spanCPF = document.getElementById("spanCpf")
+        const spanEmail = document.getElementById("spanEmail")
+        const spanConfirmar = document.getElementById("spanConfirmar")
+
+        const avisoOito = document.getElementById("caracteres")
+        const avisoEspecial = document.getElementById("especial")
+        const avisoMaiuscula = document.getElementById("maiuscula")
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputPassword = document.getElementById("senhaCadastro");
+
+            if (inputPassword) {
+                inputPassword.addEventListener("input", () => {
+                    let regexEspecial = /[!@#$%^&*(),.?":{}|<>_]/
+                    let regexMaiuscula = /[A-Z]/    
+                    
+                    if(inputPassword.value.length >= 8) {
+                        avisoOito.style.color = "#43FF00"
+                    } else {
+                        avisoOito.style.color = "#FF0101"
+                    }
+
+                    if(regexEspecial.test(inputPassword.value)) {
+                        avisoEspecial.style.color = "#43FF00"
+                    } else {
+                        avisoEspecial.style.color = "#FF0101"
+                    }
+
+                    if(regexMaiuscula.test(inputPassword.value)) {
+                        avisoMaiuscula.style.color = "#43FF00"
+                    } else {
+                        avisoMaiuscula.style.color = "#FF0101"
+                    }
+
+                });
+            } else {
+                console.error("Elemento inputSenha não encontrado!");
+            }
+        });
+
+        form.onsubmit = (event) => {
+            if (!validarIdade(inputDataNascimento.value)) {
+                event.preventDefault()
+                spanDate.classList.remove("vanish")
+            }
+
+            if (!validarCPF(inputCPF.value)) {
+                event.preventDefault()
+                spanCPF.classList.remove("vanish")
+            }
+
+            if (!validarEmail(inputEmail.value)) {
+                event.preventDefault()
+                spanEmail.classList.remove("vanish")
+            }
+
+            if (!compararSenhas(inputSenha1.value, inputSenha.value)) {
+                event.preventDefault()
+                spanConfirmar.classList.remove("vanish")
+            }
+        }
+
+        const validarIdade = (data) => {
+            if (data === '') {
+                alert("preencha o campo!")
+                return false
+            }
+            let anoAtual = new Date().getFullYear()
+            let ano = Number(data.substring(0, 4))
+            let idadeCalculada = anoAtual - ano
+
+            if (idadeCalculada < 18) {
+                return false
+            }
+            return true
+        }
+
+        const ehSenhaValida = (senha) => {
+            let regexEspecial = /[!@#$%^&*(),.?":{}|<>_]/
+            let regexMaiuscula = /[A-Z]/
+
+            if (senha.length < 8) {
+                return false
+            }
+
+            if (!regexEspecial.test(senha)) {
+                return false
+            }
+
+            if (!regexMaiuscula.test(senha)) {
+                return false
+            }
+
+            return true
+        }
+
+        const validarEmail = (email) => {
+            return email.includes("@") && email.includes(".")
+        }
+
+        const compararSenhas = (senha, confirmacaoSenha) => {
+            if (senha !== confirmacaoSenha) {
+                return false
+            }
+            return true
+        }
+
+        const validarCPF = (CPF) => {
+            let soma = 0
+            let resto = 0
+
+            const cpfLimpo = CPF.replace(/\D+/g, '')
+            const padrao = /^(\d)\1{10}$/
+
+            if (padrao.test(cpfLimpo) || cpfLimpo.length != 11) {
+                return false
+            }
+
+            for (let i = 1; i <= 9; i++) {
+                soma = soma + parseInt(cpfLimpo.substring(i - 1, i)) * (11 - i);
+            }
+
+            resto = (soma * 10) % 11;
+            if ((resto == 10) || (resto == 11))
+                resto = 0;
+            if (resto != parseInt(cpfLimpo.substring(9, 10)))
+                return false;
+            soma = 0;
+            for (let i = 1; i <= 10; i++)
+                soma = soma + parseInt(cpfLimpo.substring(i - 1, i)) * (12 - i);
+            resto = (soma * 10) % 11
+
+            if ((resto == 10) || (resto == 11))
+                resto = 0
+
+            if (resto != parseInt(cpfLimpo.substring(10, 11))) {
+                return false
+            }
+            return true
+        }
         // Função para mostrar a mensagem de erro
         function showError(message) {
             const errorMessage = document.getElementById('errorMessage');
@@ -41,4 +216,5 @@
         }
     </script>
 </body>
+
 </html>

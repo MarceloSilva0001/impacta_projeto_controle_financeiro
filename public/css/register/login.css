@@ -76,3 +76,7 @@ button:hover {
 .switch-form a:hover {
     text-decoration: underline;
 }
+
+#error-message {
+    color: red;
+}
