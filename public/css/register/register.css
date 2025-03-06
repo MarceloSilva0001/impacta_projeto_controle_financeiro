@@ -20,12 +20,14 @@ body {
 }
 .container {
     background-color: #fff;
-    padding: 80px;           /* Menos padding para um design mais compacto */
+    padding: 50px;           /* Menos padding para um design mais compacto */
     border-radius: 30px;     /* Borda arredondada */
     box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 600px;        /* Define a largura máxima da caixa */
     text-align: center;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 h2 {
@@ -45,7 +47,7 @@ input {
 
 button {
     font-family: "Roboto", serif;
-    font-weight: 400;
+    font-weight: 300;
     width: 35%;
     padding: 10px;
     background-color: #292929;
@@ -55,6 +57,7 @@ button {
     border-radius: 30px;
     cursor: pointer;
     text-align: center;
+    word-wrap: break-word;
 }
 
 button:hover {

@@ -11,7 +11,7 @@ body {
     justify-content: center; /* Centraliza horizontalmente */
     align-items: center;     /* Centraliza verticalmente */
     height: 100vh;           /* Define altura total da tela */
-    margin: 0;               /* Remove margens da página */
+    margin: 1;               /* Remove margens da página */
 }
 
 .title-login {
@@ -21,12 +21,14 @@ body {
 }
 .container {
     background-color: #fff;
-    padding: 80px;           /* Menos padding para um design mais compacto */
+    padding: 100px;           /* Menos padding para um design mais compacto */
     border-radius: 30px;     /* Borda arredondada */
     box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    width: 60%;
     max-width: 600px;        /* Define a largura máxima da caixa */
     text-align: center;
+    border-left: 5%;
+    border-right: 5%;
 }
 
 h2 {
@@ -56,6 +58,7 @@ button {
     border-radius: 30px;
     cursor: pointer;
     text-align: center;
+    word-wrap: break-word;
 }
 
 button:hover {
