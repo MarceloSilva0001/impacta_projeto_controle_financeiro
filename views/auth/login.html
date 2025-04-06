@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"content="width=device-width, initial-scale=1.0">
-    <title >Login</title>
+    <title>Login</title>
     <link rel="stylesheet" href="css/register/login.css">
 </head>
 <body>
@@ -12,19 +12,20 @@
         <h2 class="title-login">Login</h2>
         <p> Que bom te ver novamente!</p>
         <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
-        <form id="formLogin" method="post" action="/authLogin">
+
+        <!-- Removido o action do form -->
+        <form id="formLogin" method="post">
             <input type="email" id="emailLogin" placeholder="E-mail" name="email" required>
             <input type="password" id="senhaLogin" placeholder="Senha" name="password" required>
-            <!-- <div><span id="error-message">E-mail e/ou senha incorreto. Por favor, verifique novamente!</span></div> -->
             <button type="submit">Entrar</button>
         </form>
+
         <div class="switch-form">
             Não tem uma conta? <a href="/register">Cadastre-se</a>
         </div>
     </div>
 
     <script>
-        // Função para mostrar a mensagem de erro
         function showError(message) {
             const errorMessage = document.getElementById('errorMessage');
             errorMessage.style.display = 'block';
@@ -32,12 +33,42 @@
             errorMessage.style.color = "red"
         }
 
-        // Checar se há uma mensagem de erro na URL
+        // Se tiver erro na URL, mostra
         const params = new URLSearchParams(window.location.search);
         const error = params.get('error');
         if (error) {
             showError(error);
         }
+
+        // Novo código para autenticação com fetch
+        document.getElementById("formLogin").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("emailLogin").value;
+            const password = document.getElementById("senhaLogin").value;
+
+            try {
+                const response = await fetch("/authLogin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.userId) {
+                    localStorage.setItem("userId", data.userId);
+                    window.location.href = "/inicio"; // redireciona se sucesso
+                } else if (data.error) {
+                    showError(data.error);
+                }
+            } catch (err) {
+                showError("Erro ao fazer login. Tente novamente.");
+                console.error(err);
+            }
+        });
     </script>
 </body>
 </html>

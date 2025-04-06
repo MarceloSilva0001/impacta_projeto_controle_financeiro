@@ -7,13 +7,16 @@
 </head>
 <body>
   <h1>Novo Lançamento</h1>
+  
   <div class="nav-buttons">
     <a href="transacoes.html" class="btn">Ver Lançamentos</a>
   </div>
+
   <form id="form-lancamento">
     <input type="text" id="descricao" placeholder="Descrição" required>
     <input type="number" id="valor" placeholder="Valor" required>
     <input type="date" id="data" required>
+
     <select id="categoria" required>
       <option value="">Selecione a Categoria</option>
       <option value="Salário">Salário</option>
@@ -23,14 +26,64 @@
       <option value="Educação">Educação</option>
       <option value="Outros">Outros</option>
     </select>
+
     <select id="tipo" required>
       <option value="">Tipo</option>
       <option value="receita">Receita</option>
       <option value="despesa">Despesa</option>
     </select>
+
     <button type="submit" class="btn">Adicionar Lançamento</button>
   </form>
 
-  <script src="./js/lancamento.js"></script>
+  <script>
+    document.getElementById("form-lancamento").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const descricao = document.getElementById("descricao").value;
+      const valor = parseFloat(document.getElementById("valor").value);
+      const data = document.getElementById("data").value;
+      const categoria = document.getElementById("categoria").value;
+      const tipo = document.getElementById("tipo").value;
+
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        alert("Usuário não está logado.");
+        return;
+      }
+
+      const lancamento = {
+        descricao,
+        valor,
+        data,
+        categoria,
+        tipo,
+        userId: parseInt(userId)
+      };
+
+      try {
+        const response = await fetch("/lancamentos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(lancamento)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Lançamento adicionado com sucesso!");
+          document.getElementById("form-lancamento").reset();
+        } else {
+          alert("Erro ao adicionar lançamento: " + (data.error || "Erro desconhecido"));
+        }
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+        alert("Erro ao adicionar lançamento. Verifique o console.");
+      }
+    });
+  </script>
 </body>
 </html>

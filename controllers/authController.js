@@ -12,34 +12,27 @@ const AuthController = {
     },
 
     async authLogin(req, res) {
-        const { email, password } = req.body; // Pegando os dados do corpo da requisição
-    
+        const { email, password } = req.body;
+
         try {
-            // Verificar se o usuário existe
-            const user = await User.findOne({ where: { email: email } });
-            let errorMessage = 'Erro ao fazer Login';
-    
-            // Verificar se o usuário existe
+            const user = await User.findOne({ where: { email } });
+            
             if (!user) {
-                errorMessage = "E-mail não cadastrado";
-                return res.redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
+                return res.status(401).json({ error: "E-mail não cadastrado" });
             }
-    
-            // Verificar se a senha corresponde usando bcrypt
+
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
-                errorMessage = "Senha incorreta";
-                return res.redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
+                return res.status(401).json({ error: "Senha incorreta" });
             }
-    
-            // Senha correta, redireciona para a área logada
-            return res.redirect('/inicio');
+
+            // Login bem-sucedido: retornando ID para o front-end
+            return res.status(200).json({ userId: user.id });
         } catch (err) {
             console.error(err);
-            return res.status(500).send('Erro no servidor.');
+            return res.status(500).json({ error: 'Erro no servidor.' });
         }
     }
-    
 };
 
 module.exports = AuthController;
