@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {sequelize} = require('../database/index'); // Importe a instância do Sequelize
+const { sequelize } = require('../database');
 
 const User = sequelize.define('User', {
   id: {
@@ -8,36 +8,20 @@ const User = sequelize.define('User', {
     autoIncrement: true,
     allowNull: false,
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
+  name: DataTypes.STRING,
   email: {
     type: DataTypes.STRING,
-    allowNull: false,
     unique: true,
   },
   cpf: {
     type: DataTypes.STRING,
-    allowNull: false,
     unique: true,
   },
-  dateOfBirth: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
+  dateOfBirth: DataTypes.DATE,
+  password: DataTypes.STRING,
+}, {
+  tableName: 'Users',
+  timestamps: true,
 });
 
 module.exports = User;

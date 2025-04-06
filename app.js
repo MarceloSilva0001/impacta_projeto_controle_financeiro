@@ -1,20 +1,31 @@
 const express = require('express');
-const { initializeDatabase } = require('./database'); // Importa a função de inicialização do banco de dados
-const userRoutes = require('./routes/userRoutes'); // Importa as rotas de API de usuários
-const authRoutes = require('./routes/authRoutes'); // Importa as rotas de páginas autenticação de usuários (Cadastro e login)
+const { initializeDatabase } = require('./database'); // Inicializa banco e aplica migrations
 
 const app = express();
 
+// Middlewares
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Inicializa o banco de dados e depois inicia o servidor
+// Carrega os models (importante antes das associações)
+require('./models/User');
+require('./models/Lancamento');
+
+// Define os relacionamentos entre os models
+require('./models/associations');
+
+// Inicializa o banco e inicia o servidor
 initializeDatabase()
   .then(() => {
-    // Configuração do servidor
-    app.use(userRoutes); // Usa as rotas de API usuários
-    app.use(authRoutes); // Usa as rotas de autenticação de usuários
+    // Rotas
+    const userRoutes = require('./routes/userRoutes');
+    const authRoutes = require('./routes/authRoutes');
+    const lancamentoRoutes = require('./routes/lancamentoRoutes'); // <-- ADICIONE ISSO
+
+    app.use(userRoutes);
+    app.use(authRoutes);
+    app.use(lancamentoRoutes); // <-- E ISSO
 
     const PORT = 8080;
     app.listen(PORT, () => {

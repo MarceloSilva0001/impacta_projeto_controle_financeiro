@@ -31,12 +31,21 @@ async function initializeDatabase() {
     const { Umzug, SequelizeStorage } = require('umzug');
     const umzug = new Umzug({
       migrations: {
-        glob: 'migrations/*.js', // Caminho para as migrations
+        glob: 'migrations/*.js',
+        resolve: ({ name, path, context }) => {
+          const migration = require(path);
+          return {
+            name,
+            up: async () => migration.up(context, Sequelize),
+            down: async () => migration.down(context, Sequelize),
+          };
+        },
       },
-      context: sequelize.getQueryInterface(), // Contexto para as migrations
-      storage: new SequelizeStorage({ sequelize }), // Armazenamento das migrations no banco de dados
-      logger: console, // Usa o console para logs
+      context: sequelize.getQueryInterface(),
+      storage: new SequelizeStorage({ sequelize }),
+      logger: console,
     });
+    
 
     // Executa as migrations
     await umzug.up();

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Histórico de Lançamentos</title>
+  <link rel="stylesheet" href="./style_lancamento.css">
+</head>
+<body>
+  <h1>Histórico de Lançamentos</h1>
+
+  <div class="nav-buttons">
+    <a href="lancamento.html" class="btn">Novo Lançamento</a>
+  </div>
+  
+  <h2>Filtros de Busca</h2>
+
+  <div class="filtros">
+    <label for="anoFiltro">Ano:</label>
+    <select id="anoFiltro">
+      <option value="">Selecione o Ano</option>
+      <option value="2020">2020</option>
+      <option value="2021">2021</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+      <option value="2025">2025</option>
+      <option value="2026">2026</option>
+      <option value="2027">2027</option>
+      <option value="2028">2028</option>
+      <option value="2029">2029</option>
+      <option value="2030">2030</option>
+    </select>
+
+    <label for="mesFiltro">Mês:</label>
+    <select id="mesFiltro">
+      <option value="">Selecione o Mês</option>
+      <option value="janeiro">Janeiro</option>
+      <option value="fevereiro">Fevereiro</option>
+      <option value="marco">Março</option>
+      <option value="abril">Abril</option>
+      <option value="maio">Maio</option>
+      <option value="junho">Junho</option>
+      <option value="julho">Julho</option>
+      <option value="agosto">Agosto</option>
+      <option value="setembro">Setembro</option>
+      <option value="outubro">Outubro</option>
+      <option value="novembro">Novembro</option>
+      <option value="dezembro">Dezembro</option>
+    </select>
+
+    <label for="tipoFiltro">Tipo:</label>
+    <select id="tipoFiltro">
+      <option value="">Selecione o Tipo</option>
+      <option value="receita">Receita</option>
+      <option value="despesa">Despesa</option>
+    </select>
+
+    <label for="categoriaFiltro">Categoria:</label>
+    <select id="categoriaFiltro">
+      <option value="">Selecione a Categoria</option>
+      <option value="Salário">Salário</option>
+      <option value="Alimentação">Alimentação</option>
+      <option value="Transporte">Transporte</option>
+      <option value="Lazer">Lazer</option>
+      <option value="Educação">Educação</option>
+      <option value="Outros">Outros</option>
+    </select>
+
+    <button onclick="aplicarFiltros()">Aplicar Filtros</button>
+  </div>
+
+  <h2>Lista de Transações</h2>
+  <div id="lista-transacoes"></div>
+
+  <script>
+    const lista = document.getElementById('lista-transacoes');
+
+    function aplicarFiltros() {
+      const anoFiltro = document.getElementById('anoFiltro').value;
+      const mesFiltro = document.getElementById('mesFiltro').value;
+      const tipoFiltro = document.getElementById('tipoFiltro').value;
+      const categoriaFiltro = document.getElementById('categoriaFiltro').value;
+
+      const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+
+      const meses = {
+        "janeiro": "01",
+        "fevereiro": "02",
+        "marco": "03",
+        "abril": "04",
+        "maio": "05",
+        "junho": "06",
+        "julho": "07",
+        "agosto": "08",
+        "setembro": "09",
+        "outubro": "10",
+        "novembro": "11",
+        "dezembro": "12"
+      };
+
+      const transacoesFiltradas = transacoes.filter(t => {
+        const [ano, mes, dia] = t.data.split('-');
+
+        const anoValido = anoFiltro ? ano === anoFiltro : true;
+        const mesValido = mesFiltro ? mes === meses[mesFiltro] : true;
+        const tipoValido = tipoFiltro ? t.tipo === tipoFiltro : true;
+        const categoriaValida = categoriaFiltro ? t.categoria === categoriaFiltro : true;
+
+        return anoValido && mesValido && tipoValido && categoriaValida;
+      });
+
+      if (transacoesFiltradas.length === 0) {
+        lista.innerHTML = "<p>Nenhuma transação encontrada para os filtros selecionados.</p>";
+      } else {
+        const html = transacoesFiltradas.map(t => `
+          <div class="transacao">
+            <strong>${t.descricao}</strong><br>
+            Valor: R$ ${t.valor.toFixed(2)}<br>
+            Data: ${t.data}<br>
+            Categoria: ${t.categoria}<br>
+            Tipo: ${t.tipo.charAt(0).toUpperCase() + t.tipo.slice(1)}
+          </div>
+        `).join('');
+        lista.innerHTML = html;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      aplicarFiltros();
+    });
+  </script>
+</body>
+</html>
