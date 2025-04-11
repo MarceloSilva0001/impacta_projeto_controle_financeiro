@@ -1,10 +1,12 @@
 const { Op } = require('sequelize');
 const Lancamento = require('../models/Lancamento');
+const Categoria = require('../models/Categoria');
 
 // Criação de um novo lançamento
 async function createLancamento(req, res) {
   try {
-    const { descricao, valor, tipo, data, userId } = req.body;
+    const { descricao, valor, tipo, data, userId, categoria } = req.body;
+    console.log(req.body)
 
     if (!descricao || !valor || !tipo || !data || !userId) {
       return res.status(400).json({ erro: 'Todos os campos são obrigatórios.' });
@@ -16,6 +18,7 @@ async function createLancamento(req, res) {
       tipo,
       data,
       userId,
+      categoria_id: categoria
     });
 
     res.status(201).json(novoLancamento);
@@ -32,6 +35,11 @@ async function listarLancamentosPorUsuario(req, res) {
 
     const lancamentos = await Lancamento.findAll({
       where: { userId },
+      include: [{
+        model: Categoria, 
+        as: 'categoria', 
+        attributes: ['id', 'nome', 'tipo'] 
+      }]
     });
 
     res.status(200).json(lancamentos);

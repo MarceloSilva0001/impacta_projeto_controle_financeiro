@@ -28,6 +28,14 @@ const Lancamento = sequelize.define('Lancamento', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  categoria_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true, // ou false se for obrigatório
+    references: {
+      model: 'Categorias',
+      key: 'id'
+    }
+  }
 }, {
   tableName: 'Lancamentos',
   timestamps: true,

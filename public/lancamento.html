@@ -17,14 +17,26 @@
     <input type="number" id="valor" placeholder="Valor" required>
     <input type="date" id="data" required>
 
-    <select id="categoria" required>
+    <select id="categoria" name="categoria" required>
       <option value="">Selecione a Categoria</option>
-      <option value="Salário">Salário</option>
-      <option value="Alimentação">Alimentação</option>
-      <option value="Transporte">Transporte</option>
-      <option value="Lazer">Lazer</option>
-      <option value="Educação">Educação</option>
-      <option value="Outros">Outros</option>
+      
+      <!-- Receitas -->
+      <optgroup label="Receitas">
+        <option value="7">Salário</option>
+        <option value="8">Freelance</option>
+        <option value="9">Investimentos</option>
+        <option value="10">Presentes</option>
+      </optgroup>
+      
+      <!-- Despesas -->
+      <optgroup label="Despesas">
+        <option value="1">Alimentação</option>
+        <option value="2">Transporte</option>
+        <option value="3">Moradia</option>
+        <option value="4">Educação</option>
+        <option value="5">Lazer</option>
+        <option value="6">Saúde</option>
+      </optgroup>
     </select>
 
     <select id="tipo" required>
@@ -43,7 +55,7 @@
       const descricao = document.getElementById("descricao").value;
       const valor = parseFloat(document.getElementById("valor").value);
       const data = document.getElementById("data").value;
-      const categoria = document.getElementById("categoria").value;
+      const categoria = parseInt(document.getElementById("categoria").value);
       const tipo = document.getElementById("tipo").value;
 
       const userId = localStorage.getItem("userId");
