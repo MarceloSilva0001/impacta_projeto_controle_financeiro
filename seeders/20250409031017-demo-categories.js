@@ -73,3 +73,4 @@ module.exports = {
     await queryInterface.bulkDelete('Categorias', null, {});
   }
 };
+
