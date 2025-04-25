@@ -105,14 +105,6 @@ form {
   box-shadow: 0 0 10px #00000050;
 }
 
-form label {
-  margin: 10px 0 5px;
-}
-
-form input, form select {
-  width: 100%;
-}
-
 @media (max-width: 768px) {
   body {
     padding: 20px;
