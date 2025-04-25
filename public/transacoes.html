@@ -58,12 +58,16 @@
     <label for="categoriaFiltro">Categoria:</label>
     <select id="categoriaFiltro">
       <option value="">Selecione a Categoria</option>
-      <option value="Salário">Salário</option>
-      <option value="Alimentação">Alimentação</option>
-      <option value="Transporte">Transporte</option>
-      <option value="Lazer">Lazer</option>
-      <option value="Educação">Educação</option>
-      <option value="Outros">Outros</option>
+      <option value="1">Salário</option>
+      <option value="2">Alimentação</option> 
+      <option value="3">Transporte</option>
+      <option value="4">Saúde</option>
+      <option value="5">Educação</option>
+      <option value="6">Lazer</option>
+      <option value="7">Moradia</option>
+      <option value="8">Investimentos</option>
+      <option value="9">Freelance</option>
+      <option value="10">Presentes</option>
     </select>
 
     <button onclick="aplicarFiltros()">Aplicar Filtros</button>
@@ -74,7 +78,7 @@
 
   <script>
     const lista = document.getElementById('lista-transacoes');
-
+  
     const meses = {
       "janeiro": "01",
       "fevereiro": "02",
@@ -90,53 +94,83 @@
       "dezembro": "12"
     };
 
+    const categorias = {
+      "1": "Salário",
+      "2": "Alimentação",
+      "3": "Transporte",
+      "4": "Saúde",
+      "5": "Educação",
+      "6": "Lazer",
+      "7": "Moradia",
+      "8": "Investimentos",
+      "9": "Freelance",
+      "10": "Presentes"
+    };
+
     async function aplicarFiltros() {
-  const userId = localStorage.getItem("userId");
-  if (!userId) {
-    alert("Usuário não autenticado.");
-    return;
-  }
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("Usuário não autenticado.");
+        return;
+      }
+  
+      const anoFiltro = document.getElementById('anoFiltro').value;
+      const mesFiltro = document.getElementById('mesFiltro').value;
+      const tipoFiltro = document.getElementById('tipoFiltro').value;
+      const categoriaFiltro = document.getElementById('categoriaFiltro').value;
 
-  const anoFiltro = document.getElementById('anoFiltro').value;
-  const mesFiltro = document.getElementById('mesFiltro').value;
-  const tipoFiltro = document.getElementById('tipoFiltro').value;
-  const categoriaFiltro = document.getElementById('categoriaFiltro').value;
+      const queryParams = new URLSearchParams();
 
-  const queryParams = new URLSearchParams();
+      if (anoFiltro) queryParams.append("ano", anoFiltro);
+      if (mesFiltro && meses[mesFiltro]) queryParams.append("mes", meses[mesFiltro]);
+      if (tipoFiltro) queryParams.append("tipo", tipoFiltro);
+      if (categoriaFiltro) queryParams.append("categoria", categoriaFiltro);
+  
+      const url = `http://localhost:8080/lancamentos?userId=${userId}&${queryParams.toString()}`;
+      lista.innerHTML = "<p>Carregando...</p>";
+  
+      try {
+        const response = await fetch(url);
+        const lancamentos = await response.json();
+  
+        if (!lancamentos || lancamentos.length === 0) {
+          lista.innerHTML = "<p>Nenhuma transação encontrada para os filtros selecionados.</p>";
+        } else {
+          const html = lancamentos.map(t => {
+            const categoriaNome = categorias[t.categoria] || 'Categoria Desconhecida';
+            const dataFormatada = formatarData(t.data);
 
-  if (anoFiltro) queryParams.append("ano", anoFiltro);
-  if (mesFiltro) queryParams.append("mes", meses[mesFiltro]);
-  if (tipoFiltro) queryParams.append("tipo", tipoFiltro);
-  if (categoriaFiltro) queryParams.append("categoria", categoriaFiltro);
-
-  const url = `http://localhost:8080/lancamentos?userId=${userId}&${queryParams.toString()}`;
-
-  try {
-    const response = await fetch(url);
-    const lancamentos = await response.json();
-
-    if (!lancamentos.length) {
-      lista.innerHTML = "<p>Nenhuma transação encontrada para os filtros selecionados.</p>";
-    } else {
-      const html = lancamentos.map(t => `
-        <div class="transacao">
-          <strong>${t.descricao}</strong><br>
-          Valor: R$ ${parseFloat(t.valor).toFixed(2)}<br>
-          Data: ${t.data}<br>
-          Categoria: ${t.categoria}<br>
-          Tipo: ${t.tipo.charAt(0).toUpperCase() + t.tipo.slice(1)}
-        </div>
-      `).join('');
-      lista.innerHTML = html;
+            return `
+              <div class="transacao">
+                <strong>${t.descricao || 'Sem Descrição'}</strong><br>
+                Valor: R$ ${parseFloat(t.valor).toFixed(2)}<br>
+                Data: ${dataFormatada}<br>
+                Categoria: ${categoriaNome}<br>
+                Tipo: ${t.tipo.charAt(0).toUpperCase() + t.tipo.slice(1)}
+              </div>
+            `;
+          }).join('');
+          lista.innerHTML = html;
+        }
+      } catch (error) {
+        console.error("Erro ao buscar lançamentos:", error);
+        lista.innerHTML = "<p>Erro ao buscar lançamentos. Tente novamente.</p>";
+      }
     }
-  } catch (error) {
-    console.error("Erro ao buscar lançamentos:", error);
-    lista.innerHTML = "<p>Erro ao buscar lançamentos. Tente novamente.</p>";
-  }
-}
-
-
-    document.addEventListener('DOMContentLoaded', aplicarFiltros);
+  
+    function formatarData(data) {
+      const [ano, mes, dia] = data.split("T")[0].split("-");
+      return `${dia}/${mes}/${ano}`;
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        aplicarFiltros();
+      }
+    });
   </script>
+  
+  
 </body>
 </html>
