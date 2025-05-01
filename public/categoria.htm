@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerenciar Categorias</title>
   <link rel="stylesheet" href="./categoria.css" />
   <link rel="stylesheet" href="./modal_adicionar_categoria.css" />
@@ -13,11 +13,11 @@
     <main class="main-tela-principal">
       <div class="search">
         <input id="categoria" type="text" placeholder="Pesquise por uma categoria!" />
-        <img src="./img/lupinha.png" alt="Pesquisar" />
+        <img src="./img/lupinha.png" alt="" />
       </div>
 
       <div class="categorias">
-        <!-- Categorias renderizadas aqui -->
+        <!-- Categorias serão renderizadas aqui -->
       </div>
 
       <div id="nova-categoria-btn">
@@ -26,12 +26,21 @@
     </main>
   </div>
 
+  <!-- Modal -->
   <div id="modal-overlay" class="modal-overlay" onclick="fecharModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <h1 class="h1-modal">Nova Categoria</h1>
+      <h1 class="h1-modal" id="modal-titulo">Nova Categoria</h1>
       <form class="form-modal">
+        <input type="hidden" name="id" />
         <input class="input-modal" type="text" placeholder="Categoria" name="categoria" />
-        <input class="input-modal" type="text" placeholder="Tipo" name="tipo" />
+
+        <!-- Select para Tipo -->
+        <select class="input-modal" name="tipo" required>
+          <option value="" disabled selected>Tipo:</option> <!-- Texto padrão -->
+          <option value="despesa">Despesa</option>
+          <option value="receita">Receita</option>
+        </select>
+
         <button class="button-modal" type="submit">Salvar</button>
       </form>
       <div class="image"></div>
@@ -39,14 +48,30 @@
   </div>
 
   <script>
-    function abrirModal() {
-      document.getElementById('modal-overlay').style.display = 'flex';
-      console.log("[INFO] modal aberto com sucesso!");
+    function abrirModal(categoria = null) {
+      const modal = document.getElementById('modal-overlay');
+      const form = document.querySelector('.form-modal');
+      const titulo = document.getElementById('modal-titulo');
+
+      modal.style.display = 'flex';
+      form.reset();
+
+      if (categoria) {
+        titulo.textContent = 'Editar Categoria';
+        form.elements['id'].value = categoria.id;
+        form.elements['categoria'].value = categoria.nome;
+        form.elements['tipo'].value = categoria.tipo;
+      } else {
+        titulo.textContent = 'Nova Categoria';
+        form.elements['id'].value = '';
+      }
+
+      console.log("[INFO] Modal aberto.");
     }
 
     function fecharModal() {
       document.getElementById('modal-overlay').style.display = 'none';
-      console.log("[INFO] modal fechado com sucesso!");
+      console.log("[INFO] Modal fechado.");
     }
 
     function formatarData(dataISO) {
@@ -68,12 +93,8 @@
         <p><strong>Tipo:</strong> ${categoria.tipo}</p>
         <p><strong>Última atualização:</strong> ${formatarData(categoria.updatedAt)}</p>
         <div class="botoes-controle">
-          <button class="btn-excluir" data-id="${categoria.id}">
-            <img src="./img/lixeira.png" alt="Excluir">
-          </button>
-          <button class="btn-editar" data-id="${categoria.id}">
-            <img src="./img/lapis.png" alt="Editar">
-          </button>
+          <button id="lixeira" onclick="excluirCategoria(${categoria.id})" style="background-image: url('./img/lixeira.png');"></button>
+          <button id="lapis" onclick='editarCategoria(${JSON.stringify(categoria)})' style="background-image: url('./img/lapis.png');"></button>
         </div>
       `;
       return card;
@@ -86,6 +107,9 @@
           return response.json();
         })
         .then(categorias => {
+          // Ordena as categorias em ordem alfabética
+          categorias.sort((a, b) => a.nome.localeCompare(b.nome));
+
           const container = document.querySelector('.categorias');
           container.innerHTML = '';
           categorias.forEach(categoria => {
@@ -100,20 +124,23 @@
     }
 
     function excluirCategoria(id) {
-      if (!confirm("Deseja realmente excluir esta categoria?")) return;
-
+      if (!confirm("Tem certeza que deseja excluir esta categoria?")) return;
       fetch(`http://localhost:8080/categorias/${id}`, {
         method: 'DELETE'
       })
       .then(response => {
         if (!response.ok) throw new Error('Erro ao excluir categoria');
-        console.log('[INFO] Categoria excluída com sucesso!');
+        console.log('[INFO] Categoria excluída com sucesso.');
         carregarCategorias();
       })
       .catch(error => {
         console.error('[ERRO] Falha ao excluir categoria:', error);
-        alert('Erro ao excluir categoria. Veja o console para detalhes.');
+        alert('Erro ao excluir. Veja o console para detalhes.');
       });
+    }
+
+    function editarCategoria(categoria) {
+      abrirModal(categoria);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -123,6 +150,7 @@
       form.addEventListener('submit', function (event) {
         event.preventDefault();
 
+        const id = form.elements['id'].value;
         const nome = form.elements['categoria'].value.trim();
         const tipo = form.elements['tipo'].value.trim();
 
@@ -131,36 +159,31 @@
           return;
         }
 
-        const novaCategoria = { nome, tipo };
+        const dados = { nome, tipo };
+        const url = id ? `http://localhost:8080/categorias/${id}` : 'http://localhost:8080/categorias';
+        const metodo = id ? 'PUT' : 'POST';
 
-        fetch('http://localhost:8080/categorias', {
-          method: 'POST',
+        fetch(url, {
+          method: metodo,
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(novaCategoria)
+          body: JSON.stringify(dados)
         })
         .then(response => {
           if (!response.ok) throw new Error('Erro ao salvar categoria');
           return response.json();
         })
-        .then(categoriaSalva => {
-          console.log('[INFO] Categoria salva com sucesso:', categoriaSalva);
+        .then(() => {
+          console.log(`[INFO] Categoria ${id ? 'atualizada' : 'criada'} com sucesso.`);
           fecharModal();
           form.reset();
           carregarCategorias();
         })
         .catch(error => {
           console.error('[ERRO] Falha ao salvar categoria:', error);
-          alert('Erro ao salvar categoria. Veja o console para detalhes.');
+          alert('Erro ao salvar. Veja o console para detalhes.');
         });
-      });
-
-      document.querySelector('.categorias').addEventListener('click', function (event) {
-        if (event.target.closest('.btn-excluir')) {
-          const id = event.target.closest('.btn-excluir').dataset.id;
-          excluirCategoria(id);
-        }
       });
     });
   </script>
