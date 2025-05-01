@@ -1,0 +1,84 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 330px;
+  height: 540px;
+  background-color: #74BFF7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  border-radius: 8px;
+}
+
+.h1-modal {
+  color: #FFF;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.form-modal {
+  background-color: #E9F1DF;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.input-modal {
+  width: 90%;
+  height: 35px;
+  border: none;
+  background-color: #FFF;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+  padding-left: 8px;
+}
+
+.input-modal::placeholder {
+  color: #474747;
+  font-family: Arial;
+  font-size: 15px;
+}
+
+.button-modal {
+  background-color: #00A6FF;
+  border: none;
+  cursor: pointer;
+  height: 30px;
+  width: 120px;
+  color: #FFF;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-modal:hover {
+  background-color: #008cdd;
+  transform: scale(1.05);
+}
+
+.image {
+  margin-top: 20px;
+  width: 160px;
+  height: 160px;
+  background-image: url('./img/financas-image.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
