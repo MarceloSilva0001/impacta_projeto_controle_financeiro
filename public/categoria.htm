@@ -49,7 +49,6 @@
       console.log("[INFO] modal fechado com sucesso!");
     }
 
-    // Formata a data ISO para "dd/mm/yyyy hh:mm:ss"
     function formatarData(dataISO) {
       const data = new Date(dataISO);
       const dia = String(data.getDate()).padStart(2, '0');
@@ -96,7 +95,46 @@
         });
     }
 
-    window.addEventListener('DOMContentLoaded', carregarCategorias);
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarCategorias();
+
+      const form = document.querySelector('.form-modal');
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const nome = form.elements['categoria'].value.trim();
+        const tipo = form.elements['tipo'].value.trim();
+
+        if (!nome || !tipo) {
+          alert('Preencha todos os campos!');
+          return;
+        }
+
+        const novaCategoria = { nome, tipo };
+
+        fetch('http://localhost:8080/categorias', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(novaCategoria)
+        })
+        .then(response => {
+          if (!response.ok) throw new Error('Erro ao salvar categoria');
+          return response.json();
+        })
+        .then(categoriaSalva => {
+          console.log('[INFO] Categoria salva com sucesso:', categoriaSalva);
+          fecharModal();
+          form.reset();
+          carregarCategorias();
+        })
+        .catch(error => {
+          console.error('[ERRO] Falha ao salvar categoria:', error);
+          alert('Erro ao salvar categoria. Veja o console para detalhes.');
+        });
+      });
+    });
   </script>
 </body>
 </html>
