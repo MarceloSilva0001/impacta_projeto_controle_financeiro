@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gerenciar Categorias</title>
-  <link rel="stylesheet" href="./categoria.css">
-  <link rel="stylesheet" href="./modal_adicionar_categoria.css">
+  <link rel="stylesheet" href="./categoria.css" />
+  <link rel="stylesheet" href="./modal_adicionar_categoria.css" />
 </head>
 <body>
   <div class="container">
     <h1>Gerenciador de Categorias</h1>
     <main class="main-tela-principal">
       <div class="search">
-        <input id="categoria" type="text" placeholder="Pesquise por uma categoria!">
-        <img src="./img/lupinha.png" alt="">
+        <input id="categoria" type="text" placeholder="Pesquise por uma categoria!" />
+        <img src="./img/lupinha.png" alt="Pesquisar" />
       </div>
 
       <div class="categorias">
-        <!-- Categorias serão renderizadas aqui -->
+        <!-- Categorias renderizadas aqui -->
       </div>
 
       <div id="nova-categoria-btn">
@@ -30,8 +30,8 @@
     <div class="modal-content" onclick="event.stopPropagation()">
       <h1 class="h1-modal">Nova Categoria</h1>
       <form class="form-modal">
-        <input class="input-modal" type="text" placeholder="Categoria" name="categoria">
-        <input class="input-modal" type="text" placeholder="Tipo" name="tipo">
+        <input class="input-modal" type="text" placeholder="Categoria" name="categoria" />
+        <input class="input-modal" type="text" placeholder="Tipo" name="tipo" />
         <button class="button-modal" type="submit">Salvar</button>
       </form>
       <div class="image"></div>
@@ -68,8 +68,12 @@
         <p><strong>Tipo:</strong> ${categoria.tipo}</p>
         <p><strong>Última atualização:</strong> ${formatarData(categoria.updatedAt)}</p>
         <div class="botoes-controle">
-          <button id="lixeira"></button>
-          <button id="lapis"></button>
+          <button class="btn-excluir" data-id="${categoria.id}">
+            <img src="./img/lixeira.png" alt="Excluir">
+          </button>
+          <button class="btn-editar" data-id="${categoria.id}">
+            <img src="./img/lapis.png" alt="Editar">
+          </button>
         </div>
       `;
       return card;
@@ -93,6 +97,23 @@
         .catch(error => {
           console.error('[ERRO] Falha ao carregar categorias:', error);
         });
+    }
+
+    function excluirCategoria(id) {
+      if (!confirm("Deseja realmente excluir esta categoria?")) return;
+
+      fetch(`http://localhost:8080/categorias/${id}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Erro ao excluir categoria');
+        console.log('[INFO] Categoria excluída com sucesso!');
+        carregarCategorias();
+      })
+      .catch(error => {
+        console.error('[ERRO] Falha ao excluir categoria:', error);
+        alert('Erro ao excluir categoria. Veja o console para detalhes.');
+      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -133,6 +154,13 @@
           console.error('[ERRO] Falha ao salvar categoria:', error);
           alert('Erro ao salvar categoria. Veja o console para detalhes.');
         });
+      });
+
+      document.querySelector('.categorias').addEventListener('click', function (event) {
+        if (event.target.closest('.btn-excluir')) {
+          const id = event.target.closest('.btn-excluir').dataset.id;
+          excluirCategoria(id);
+        }
       });
     });
   </script>
