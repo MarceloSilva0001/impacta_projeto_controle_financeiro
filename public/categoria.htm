@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerenciar Categorias</title>
   <link rel="stylesheet" href="./categoria.css">
-  <link rel="stylesheet" href="./modal_adicionar_categoria.css"> <!-- CSS isolado do modal -->
+  <link rel="stylesheet" href="./modal_adicionar_categoria.css">
 </head>
 <body>
   <div class="container">
@@ -16,28 +16,16 @@
         <img src="./img/lupinha.png" alt="">
       </div>
 
-      <!-- Cards de categoria -->
       <div class="categorias">
-        <div class="items">
-          <p><strong>Categoria:</strong> Salário</p>
-          <p><strong>Tipo:</strong> receita</p>
-          <p><strong>Última atualização:</strong> 2025-04-19 21:01:48</p>
-          <div class="botoes-controle">
-            <button id="lixeira"></button>
-            <button id="lapis"></button>
-          </div>
-        </div>
-        <!-- Mais cards... -->
+        <!-- Categorias serão renderizadas aqui -->
       </div>
 
-      <!-- Botão para abrir modal -->
       <div id="nova-categoria-btn">
         <button onclick="abrirModal()">+</button>
       </div>
     </main>
   </div>
 
-  <!-- Modal oculto inicialmente -->
   <div id="modal-overlay" class="modal-overlay" onclick="fecharModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
       <h1 class="h1-modal">Nova Categoria</h1>
@@ -53,13 +41,62 @@
   <script>
     function abrirModal() {
       document.getElementById('modal-overlay').style.display = 'flex';
-      console.log("[INFO] modal aberto com sucesso!")
+      console.log("[INFO] modal aberto com sucesso!");
     }
 
     function fecharModal() {
       document.getElementById('modal-overlay').style.display = 'none';
-      console.log("[INFO] modal fechado com sucesso!")
+      console.log("[INFO] modal fechado com sucesso!");
     }
+
+    // Formata a data ISO para "dd/mm/yyyy hh:mm:ss"
+    function formatarData(dataISO) {
+      const data = new Date(dataISO);
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      const horas = String(data.getHours()).padStart(2, '0');
+      const minutos = String(data.getMinutes()).padStart(2, '0');
+      const segundos = String(data.getSeconds()).padStart(2, '0');
+      return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+    }
+
+    function criarCardCategoria(categoria) {
+      const card = document.createElement('div');
+      card.className = 'items';
+      card.innerHTML = `
+        <p><strong>Categoria:</strong> ${categoria.nome}</p>
+        <p><strong>Tipo:</strong> ${categoria.tipo}</p>
+        <p><strong>Última atualização:</strong> ${formatarData(categoria.updatedAt)}</p>
+        <div class="botoes-controle">
+          <button id="lixeira"></button>
+          <button id="lapis"></button>
+        </div>
+      `;
+      return card;
+    }
+
+    function carregarCategorias() {
+      fetch('http://localhost:8080/categorias')
+        .then(response => {
+          if (!response.ok) throw new Error('Erro ao buscar categorias');
+          return response.json();
+        })
+        .then(categorias => {
+          const container = document.querySelector('.categorias');
+          container.innerHTML = '';
+          categorias.forEach(categoria => {
+            const card = criarCardCategoria(categoria);
+            container.appendChild(card);
+          });
+          console.log(`[INFO] ${categorias.length} categorias carregadas.`);
+        })
+        .catch(error => {
+          console.error('[ERRO] Falha ao carregar categorias:', error);
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', carregarCategorias);
   </script>
 </body>
 </html>
