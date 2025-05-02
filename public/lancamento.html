@@ -4,12 +4,26 @@
   <meta charset="UTF-8">
   <title>Novo Lançamento</title>
   <link rel="stylesheet" href="./style_lancamento.css">
+  <style>
+    #button-container {
+      display: flex;
+    }
+
+    #button-container > div {
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
   <h1>Novo Lançamento</h1>
   
-  <div class="nav-buttons">
-    <a href="transacoes.html" class="btn">Ver Lançamentos</a>
+  <div id="button-container">
+    <div class="nav-buttons">
+      <a href="transacoes.html" class="btn">Ver Lançamentos</a>
+    </div>
+    <div class="nav-buttons">
+      <a href="categoria.htm" class="btn">Gerenciar Categorias</a>
+    </div>
   </div>
 
   <form id="form-lancamento">
