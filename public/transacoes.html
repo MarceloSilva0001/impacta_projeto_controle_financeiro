@@ -126,20 +126,21 @@
       if (tipoFiltro) queryParams.append("tipo", tipoFiltro);
       if (categoriaFiltro) queryParams.append("categoria", categoriaFiltro);
   
-      const url = `http://localhost:8080/lancamentos?userId=${userId}&${queryParams.toString()}`;
+      const url = `http://localhost:8080/lancamentos/${userId}`;
       lista.innerHTML = "<p>Carregando...</p>";
   
       try {
         const response = await fetch(url);
         const lancamentos = await response.json();
+        console.log(lancamentos)
   
         if (!lancamentos || lancamentos.length === 0) {
           lista.innerHTML = "<p>Nenhuma transação encontrada para os filtros selecionados.</p>";
         } else {
           const html = lancamentos.map(t => {
-            const categoriaNome = categorias[t.categoria] || 'Categoria Desconhecida';
+            const categoriaNome = t.categoria.nome || 'Categoria Desconhecida';
             const dataFormatada = formatarData(t.data);
-
+            console.log(t.categoria.nome)
             return `
               <div class="transacao">
                 <strong>${t.descricao || 'Sem Descrição'}</strong><br>
