@@ -36,7 +36,7 @@
       <option value="">Selecione o Mês</option>
       <option value="janeiro">Janeiro</option>
       <option value="fevereiro">Fevereiro</option>
-      <option value="marco">Março</option>
+      <option value="março">Março</option>
       <option value="abril">Abril</option>
       <option value="maio">Maio</option>
       <option value="junho">Junho</option>
@@ -82,7 +82,7 @@
     const meses = {
       "janeiro": "01",
       "fevereiro": "02",
-      "marco": "03",
+      "março": "03",
       "abril": "04",
       "maio": "05",
       "junho": "06",
@@ -138,9 +138,15 @@
           lista.innerHTML = "<p>Nenhuma transação encontrada para os filtros selecionados.</p>";
         } else {
           const html = lancamentos.map(t => {
-            const categoriaNome = t.categoria.nome || 'Categoria Desconhecida';
+            const categoriaNome = (t.categoria && t.categoria.nome) ? t.categoria.nome : 'Categoria Desconhecida';
             const dataFormatada = formatarData(t.data);
-            console.log(t.categoria.nome)
+
+            if (t.categoria && t.categoria.nome) {
+              console.log(t.categoria.nome);
+            } else {
+              console.log("Categoria não definida");
+            }
+
             return `
               <div class="transacao">
                 <strong>${t.descricao || 'Sem Descrição'}</strong><br>
@@ -171,7 +177,5 @@
       }
     });
   </script>
-  
-  
 </body>
 </html>
