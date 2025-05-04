@@ -1,0 +1,21 @@
+a.botao {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #007bff; /* Azul vibrante */
+    color: white; /* Texto branco para contraste */
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px; /* Cantos arredondados */
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+a.botao:hover {
+    background-color: #0066ff; /* Azul mais escuro ao passar o mouse */
+    transform: scale(1.05); /* Efeito sutil de expansão */
+}
+
+a.botao:active {
+    background-color: #007bff; /* Azul ainda mais escuro quando clicado */
+    transform: scale(0.98); /* Efeito de leve contração */
+}
