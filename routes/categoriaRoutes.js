@@ -14,7 +14,7 @@ const {
 router.get('/dashboard', dashboard);
 
 // GET cattegories view
-router.get('/categorias', categories);
+router.get('/categoriasview', categories);
 
 // GET /categorias → listar categorias
 router.get('/categorias', listarCategorias);
