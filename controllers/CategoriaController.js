@@ -1,4 +1,6 @@
 const  Categoria  = require('../models/Categoria');
+const path = require('path');
+
 
 // Listar todas as categorias
 const listarCategorias = async (req, res) => {
@@ -77,9 +79,21 @@ const excluirCategoria = async (req, res) => {
   }
 };
 
+// View categories
+const categories = async (req, res) => {
+  res.status(201).sendFile(path.join(__dirname, '../public/categoria.html'));
+}
+
+// Dashboard
+const dashboard = async (req, res) => {
+  res.status(201).sendFile(path.join(__dirname, '../public/dashboard.html'));
+}
+
 module.exports = {
   listarCategorias,
   criarCategoria,
   atualizarCategoria,
-  excluirCategoria
+  excluirCategoria,
+  dashboard,
+  categories
 };

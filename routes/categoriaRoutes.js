@@ -4,8 +4,17 @@ const {
   listarCategorias,
   criarCategoria,
   atualizarCategoria,
-  excluirCategoria
+  excluirCategoria,
+  dashboard,
+  categories
+
 } = require('../controllers/CategoriaController');
+
+// GET dashboard
+router.get('/dashboard', dashboard);
+
+// GET cattegories view
+router.get('/categorias', categories);
 
 // GET /categorias → listar categorias
 router.get('/categorias', listarCategorias);
