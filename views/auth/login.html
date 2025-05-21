@@ -60,6 +60,7 @@
 
                 if (data.userId) {
                     localStorage.setItem("userId", data.userId);
+                    localStorage.setItem("userSubscriptionType", `{"type":"free"}`)
                     window.location.href = "/inicio"; // redireciona se sucesso
                 } else if (data.error) {
                     showError(data.error);
