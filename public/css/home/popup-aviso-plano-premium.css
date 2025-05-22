@@ -1,0 +1,85 @@
+.popup-link {
+  text-decoration: none;
+  color: #fff;
+}
+
+.popup-main-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;           /* modal fica oculto por padrão */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.popup-main-container.active {
+  display: flex;           /* exibe o modal quando ativo */
+}
+
+.popup-inner-container-paragraph {
+  padding-top: 10px;
+  font-weight: 500;
+  font-size: 20px;
+  text-align: center;
+}
+
+.popup-section-container {
+  background-color: #ffffff;
+  width: 280px;
+  height: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+}
+
+.popup-button-asign {
+  background-color: rgb(113, 158, 225);
+  width: 150px;
+  height: 45px;
+  border: none;
+  margin: 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  transition: background-color 0.8s ease, transform 0.3s ease;
+}
+
+.popup-button-asign:hover {
+  background-color: #b4cff0;
+  transform: scale(1.1);
+}
+
+.popup-inner-container {
+  width: 220px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.popup-img-badsmile {
+  width: 80px;
+  height: 80px;
+}
+
+.popup-inner-container span {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 5px;
+  user-select: none;
+}

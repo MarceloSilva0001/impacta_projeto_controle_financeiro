@@ -1,27 +1,163 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home - App finanças</title>
-    <link rel="stylesheet" href="css/home/style.css">
+    <link rel="stylesheet" href="css/home/style.css" />
+    <link rel="stylesheet" href="css/home/popup-aviso-plano-premium.css" />
+    <style>
+        /* Modal CSS (popup-aviso-plano-premium.css) */
+        .popup-link {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .popup-main-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* oculto por padrão */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .popup-main-container.active {
+            display: flex; /* aparece quando a classe active é adicionada */
+        }
+
+        .popup-inner-container-paragraph {
+            padding-top: 10px;
+            font-weight: 500;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .popup-section-container {
+            background-color: #ffffff;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.25);
+        }
+
+        .popup-button-asign {
+            background-color: rgb(113, 158, 225);
+            width: 150px;
+            height: 45px;
+            border: none;
+            margin: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            transition: background-color 0.8s ease, transform 0.3s ease;
+        }
+
+        .popup-button-asign:hover {
+            background-color: #b4cff0;
+            transform: scale(1.1);
+        }
+
+        .popup-inner-container {
+            width: 220px;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .popup-img-badsmile {
+            width: 80px;
+            height: 80px;
+        }
+
+        .popup-inner-container span {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 5px;
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
     <div class="welcome-container">
         <div class="image-container">
-            <img src="img/financa.jpeg" alt="Imagem ilustrativa contábil">
+            <img src="img/financa.jpeg" alt="Imagem ilustrativa contábil" />
         </div>
         <div class="text-container">
             <div class="welcome-message">
                 <h1>Seja bem-vindo!</h1>
-                <p>Gerencie suas finanças de forma simples e eficiente. <br> Planeje seu orçamento, acompanhe sua receita e suas despesas e conquiste objetivos financeiros.</p>
+                <p>
+                    Gerencie suas finanças de forma simples e eficiente. <br />
+                    Planeje seu orçamento, acompanhe sua receita e suas despesas e conquiste objetivos financeiros.
+                </p>
             </div>
             <div id="buttons" class="cta">
                 <a href="./lancamento.html" class="btn">Novo Lançamento</a>
-                <a href="./transacoes.html" class="btn"><strog>Histórico de Lançamento</strog></a>
-                <a href="/categoriasview" class="btn"><strog>Categorias</strog></a>
-                <a href="/dashboard" class="btn"><strog>DashBoard</strog></a>
+                <a href="./transacoes.html" class="btn"><strong>Histórico de Lançamento</strong></a>
+                <a href="/categoriasview" class="btn"><strong>Categorias</strong></a>
+                <a href="/dashboard" class="btn"><strong>DashBoard</strong></a>
             </div>
         </div>
     </div>
-    
+
+    <div class="popup-main-container" id="premiumModal">
+        <div class="popup-section-container">
+            <div class="popup-inner-container">
+                <span id="closeModal">X</span>
+                <p class="popup-inner-container-paragraph">
+                    Ops, para ter acesso a essa função, você precisa assinar o plano Premium.
+                </p>
+                <img class="popup-img-badsmile" src="img/image.png" alt="Emoji triste" />
+            </div>
+            <button class="popup-button-asign">
+                <a class="popup-link" href="planos.html">Assinar Plano</a>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Verifica se usuário é free
+        const userSubscription = JSON.parse(localStorage.getItem('userSubscriptionType'));
+
+        // Pega os botões de navegação protegidos
+        const categoriasBtn = document.querySelector('a[href="/categoriasview"]');
+        const dashboardBtn = document.querySelector('a[href="/dashboard"]');
+
+        // Modal
+        const modal = document.getElementById('premiumModal');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        function handleProtectedRouteClick(e) {
+            if (userSubscription && userSubscription.type === 'free') {
+                e.preventDefault();
+                modal.classList.add('active'); // mostra o modal
+            }
+            // se for premium, navega normalmente
+        }
+
+        categoriasBtn.addEventListener('click', handleProtectedRouteClick);
+        dashboardBtn.addEventListener('click', handleProtectedRouteClick);
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active'); // esconde o modal
+        });
+    </script>
+</body>
+</html>
