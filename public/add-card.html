@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adicionar Cartão</title>
+  <link rel="stylesheet" href="./css/add-card/add-card.css">
+</head>
+<body>
+  <div class="card-container">
+    <h2>Somente pagamento no crédito</h2>
+
+    <div class="card-preview">
+      <div class="card-visual">
+        <div class="card-chip"></div>
+        <div class="card-number" id="preview-number">•••• •••• •••• ••••</div>
+        <div class="card-footer">
+          <span id="preview-expiry">••/••</span>
+          <span id="preview-name">NOME DO TITULAR</span>
+        </div>
+      </div>
+    </div>
+
+    <form id="card-form">
+      <input type="text" placeholder="Número do Cartão" id="card-number" maxlength="19" />
+      <input type="text" placeholder="CVC" id="card-cvc" maxlength="3" />
+      <input type="text" placeholder="Validade (MM/AA)" id="card-expiry" maxlength="5" />
+      <input type="text" placeholder="Nome no Cartão" id="card-name" />
+
+      <button type="submit">Pagar</button>
+    </form>
+
+    <p class="privacy-info">Nós cuidamos da sua informação com segurança</p>
+  </div>
+
+  <script src="add-card.js"></script>
+</body>
+</html>
