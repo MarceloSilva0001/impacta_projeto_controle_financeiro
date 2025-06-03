@@ -113,6 +113,7 @@
                 <a href="./transacoes.html" class="btn"><strong>Histórico de Lançamento</strong></a>
                 <a href="/categoriasview" class="btn"><strong>Categorias</strong></a>
                 <a href="/dashboard" class="btn"><strong>DashBoard</strong></a>
+                <a href="/planos.html" class="btn" id="planos"><strong>Planos</strong></a>
             </div>
         </div>
     </div>
@@ -157,6 +158,16 @@
         closeModalBtn.addEventListener('click', () => {
             modal.classList.remove('active'); // esconde o modal
         });
+
+        document.addEventListener("DOMContentLoaded", ()=> {
+            const LinkPagePlanos = document.getElementById("planos");
+            const subscription = localStorage.getItem('userSubscriptionType');
+            var plano = JSON.parse(subscription);
+            if (plano.type === "premium") {
+                LinkPagePlanos.style.display = "none"
+            }
+        })
+        
     </script>
 </body>
 </html>

@@ -54,11 +54,13 @@ initializeDatabase()
     const authRoutes = require('./routes/authRoutes');
     const lancamentoRoutes = require('./routes/lancamentoRoutes');
     const categoriaRoutes = require('./routes/categoriaRoutes');
+    const payment = require('./routes/payment');
 
     app.use(userRoutes);
     app.use(authRoutes);
     app.use(lancamentoRoutes);
     app.use(categoriaRoutes);
+    app.use(payment);
 
     const PORT = 8080;
     app.listen(PORT, () => {

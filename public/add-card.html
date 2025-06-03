@@ -22,17 +22,18 @@
     </div>
 
     <form id="card-form" action="thank-you.html">
-      <input type="text" placeholder="Número do Cartão" id="card-number" maxlength="19" required/>
-      <input type="text" placeholder="CVC" id="card-cvc" maxlength="3" required/>
-      <input type="text" placeholder="Validade (MM/AA)" id="card-expiry" maxlength="5" required/>
-      <input type="text" placeholder="Nome no Cartão" id="card-name" required/>
+      <input type="text" placeholder="Número do Cartão" id="card-number" maxlength="19" value="5555 4444 6666 7777" required/>
+      <input type="text" placeholder="CVC" id="card-cvc" maxlength="3" value="989" required/>
+      <input type="text" placeholder="Validade (MM/AA)" id="card-expiry" maxlength="5" value="27/35" required/>
+      <input type="text" placeholder="Nome no Cartão" id="card-name" value="Fulano da silva" required/>
 
-      <button type="submit">Pagar</button>
+      <button type="button" onclick="assinarPlano()">Pagar</button>
+      <a href="/inicio">Cancelar</a>
     </form>
 
     <p class="privacy-info">Nós cuidamos da sua informação com segurança</p>
   </div>
 
-  <script src="add-card.js"></script>
+  <script src="js/add-card.js"></script>
 </body>
 </html>

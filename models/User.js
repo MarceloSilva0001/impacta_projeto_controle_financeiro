@@ -19,6 +19,11 @@ const User = sequelize.define('User', {
   },
   dateOfBirth: DataTypes.DATE,
   password: DataTypes.STRING,
+  subscriptionType: {
+    type: DataTypes.STRING,
+    defaultValue: 'free',
+    allowNull: false
+  }
 }, {
   tableName: 'Users',
   timestamps: true,

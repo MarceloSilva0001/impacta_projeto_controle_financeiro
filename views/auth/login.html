@@ -59,9 +59,16 @@
                 const data = await response.json();
 
                 if (data.userId) {
+                    // Armazena os dados do usuário no localStorage
                     localStorage.setItem("userId", data.userId);
-                    localStorage.setItem("userSubscriptionType", `{"type":"free"}`)
-                    window.location.href = "/inicio"; // redireciona se sucesso
+                    
+                    // Armazena o tipo de assinatura vindo do back-end
+                    localStorage.setItem("userSubscriptionType", JSON.stringify({
+                        type: data.subscriptionType || 'free' // Fallback para 'free' se não vier do back-end
+                    }));
+                    
+                    // Redireciona para a página inicial
+                    window.location.href = "/inicio";
                 } else if (data.error) {
                     showError(data.error);
                 }
